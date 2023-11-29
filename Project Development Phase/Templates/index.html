@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Diabetes Predictor</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+    <link href="https://unpkg.com/@tailwindcss/custom-forms/dist/custom-forms.min.css" rel="stylesheet">
+    
+    <style>
+        .max-h-64 {
+            max-height: 16rem;
+        }
+        form {
+            max-width: 2000px;
+            margin: auto;
+            /* margin-left:5rem; */
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select,
+        .form-multiselect {
+            background-color: #edf2f7;
+        }
+        .submit-button {
+  /* Button styles */
+  background-color: #4CAF50; /* Green background color */
+  color: white; /* Text color */
+  padding: 10px 20px; /* Padding around the button text */
+  border: none; /* Remove button border */
+  cursor: pointer; /* Display a pointer cursor on hover */
+}
+
+/* Additional styles for button hover and focus states */
+.submit-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.submit-button:focus {
+  outline: none; /* Remove the default focus outline */
+  box-shadow: 0 0 5px #4CAF50; /* Add a shadow when the button is focused */
+}
+
+/* .text-container {
+  background-color: green;
+  border: 2px solid black;
+  padding: 10px;
+  border-radius: 5px;
+} */
+/* .output-container {
+            margin-top: 20px;
+            text-align: center;
+            background-color: #4CAF50;
+            padding: 40px;
+        }
+         */
+        .output-message {
+            color: #000000; /* Change the color to your desired color */
+            font-weight: 500;
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
+
+    <nav id="header" class="bg-white fixed w-full z-10 top-0 shadow">
+
+        <div class="w-full container mx-auto flex flex-wrap items-center justify-between my-4">
+
+            <div class="pl-4 md:pl-0">
+                <a class="flex items-center text-yellow-600 text-base xl:text-xl no-underline hover:no-underline font-extrabold font-sans" href="#">
+                    <svg class="fill-current h-6 inline-block text-yellow-600 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M16 2h4v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V0h16v2zm0 2v13a1 1 0 0 0 1 1 1 1 0 0 0 1-1V4h-2zM2 2v15a1 1 0 0 0 1 1h11.17a2.98 2.98 0 0 1-.17-1V2H2zm2 8h8v2H4v-2zm0 4h8v2H4v-2zM4 4h8v4H4V4z" />
+                    </svg> Diabetes Prediction
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!--Container-->
+    <div class="container w-full flex flex-wrap mx-auto px-2 pt-8 lg:pt-16 mt-16">
+        <div class="w-full lg:w-1/5 px-6 text-xl text-gray-800 leading-normal">
+            <p class="text-base font-bold py-2 lg:pb-6 text-gray-700">Menu</p>
+            <div class="block lg:hidden sticky inset-0">
+                <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-gray-600 hover:border-yellow-600 appearance-none focus:outline-none">
+                    <svg class="fill-current h-3 float-right" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="w-full sticky inset-0 hidden max-h-64 lg:h-auto overflow-x-hidden overflow-y-auto lg:overflow-y-hidden lg:block mt-0 my-2 lg:my-0 border border-gray-400 lg:border-transparent bg-white shadow lg:shadow-none lg:bg-transparent z-20" style="top:6em;" id="menu-content">
+                <ul class="list-reset py-2 md:py-0">
+                    <li class="py-1 md:my-2 hover:bg-yellow-100 lg:hover:bg-transparent border-l-4 border-transparent font-bold border-yellow-600">
+                        <a href='#section1' class="block pl-4 align-middle text-gray-700 no-underline hover:text-yellow-600">
+                            <span class="pb-1 md:pb-0 text-sm">Section 1-Medical records</span>
+                        </a>
+                    </li>
+                    <li class="py-1 md:my-2 hover:bg-yellow-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                        <a href='#section2' class="block pl-4 align-middle text-gray-700 no-underline hover:text-yellow-600">
+                            <span class="pb-1 md:pb-0 text-sm">Section 2-Lifestyle</span>
+                        </a>
+                    </li>
+                    <li class="py-1 md:my-2 hover:bg-yellow-100 lg:hover:bg-transparent border-l-4 border-transparent">
+                        <a href='#section3' class="block pl-4 align-middle text-gray-700 no-underline hover:text-yellow-600">
+                            <span class="pb-1 md:pb-0 text-sm">Section 3-Healthcare</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form align = 'center' action = "/login" method= "post">
+        <!--Section container-->
+        <section>
+        <!-- <section class="w-full lg:w-4/5"> -->
+            
+          <h2 class="font-sans font-bold break-normal text-gray-700 px-2 pb-8 text-xl">Section 1- Medical Records</h2>
+
+            <!--Card-->
+            <div class="md:flex mb-6">
+                <div class="md:w-1/3">
+                    <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                        Age
+                    </label>
+                </div>
+                <div class="md:w-2/3">
+                    <select name="Age" class="form-select block w-full focus:bg-white" id="my-select">
+                        <option value="1">18-24</option>
+                        <option value="2">25-30</option>
+                        <option value="3">31-35</option>
+                        <option value="4">36-40</option>
+                        <option value="5">41-45</option>
+                        <option value="6">46-50</option>
+                        <option value="7">51-54</option>
+                        <option value="8">55-59</option>
+                        <option value="9">60-64</option>
+                        <option value="10">65-70</option>
+                        <option value="11">71-74</option>
+                        <option value="12">75-79</option>
+                        <option value="13">80-older</option>
+                    </select>
+
+                </div>
+            </div>
+
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                Sex
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <select name="Sex" class="form-select block w-full focus:bg-white" id="my-select">
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                High Blood Pressure
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <select name="HighBP" class="form-select block w-full focus:bg-white" id="my-select">
+                                <option value="NO">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                           <!-- <input type="number" name = "HighBP" required/> -->
+                           <p class="py-2 text-sm text-gray-600">If you have high BP, that is over 130 mm Hg, then select Yes.</p>
+
+                        </div>
+                    </div>
+
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                High Cholestrol
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <select name="Highchol" class="form-select block w-full focus:bg-white" id="my-select">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                            <!-- <input type="number" name = "HighChol" required/> -->
+                            <p class="py-2 text-sm text-gray-600">If you have high Cholestrol, that is over 240mg/dl, then select Yes.</p>
+                        </div>
+                    </div>
+
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                Cholestrol Check
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <select name="CholCheck" class="form-select block w-full focus:bg-white" id="my-select">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                            <!-- <input type="number" name = "CholCheck" required/> -->
+                            <p class="py-2 text-sm text-gray-600">If you have done Cholestrol check in this past 5 years, then select Yes.</p>
+                        </div>
+                    </div>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                BMI
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <input class="form-input block w-full focus:bg-white" name="BMI" type="number" value="">
+                        <p class="py-2 text-sm text-gray-600">Enter your BMI.</p>
+                    </div>
+
+                    </div>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                Stroke
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <select name = "Stroke" class="form-select block w-full focus:bg-white" id="my-select">
+                                <option  value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                            <p class="py-2 text-sm text-gray-600">If you had Stroke even once, select Yes.</p>
+
+                        </div>
+                    </div>
+                    <div class="md:flex mb-6">
+                        <div class="md:w-1/3">
+                            <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                                Heart Diseases or Attack
+                            </label>
+                        </div>
+                        <div class="md:w-2/3">
+                            <select name = "HeartDiseaseorAttack" class="form-select block w-full focus:bg-white" id="my-select">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                            <!-- <input type="number" name = "HeartDiseaseorAttack" required/> -->
+
+                            <p class="py-2 text-sm text-gray-600"> If you have Coronary Heart Diseases or Myocardial Infractions, select Yes.</p>
+                        </div>
+                    </div>
+
+            </div>
+            <!--/Card-->
+
+            
+            <!--divider-->
+            <hr class="bg-gray-300 my-12">
+
+            <!--Title-->
+            <h2 class="font-sans font-bold break-normal text-gray-700 px-2 pb-8 text-xl">Section 2- LifeStyle</h2>
+
+            <!--Card-->
+            <div id='section2' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Smoker
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "Smoker" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                        <!-- <input type="number" name = "Smoker"required/> -->
+
+                        <p class="py-2 text-sm text-gray-600">If you have smoked atleast 100 cigarettes in the entire life time, then select Yes.</p>
+                    </div>
+                </div>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Physical Activity
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "PhysActivity" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                        <!-- <input type="number" name = "PhysActivity" required/> -->
+
+                        <p class="py-2 text-sm text-gray-600">If you have done any physical activity in the past 30 days, then select Yes.</p>
+                    </div>
+                </div>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Fruits
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "Fruits" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option  value="Yes">Yes</option>
+                        </select>
+                        <!-- <input type="number" name = "Fruits" required/> -->
+
+                        <p class="py-2 text-sm text-gray-600">If you consume fruits one or more times in a day, then select Yes.</p>
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Veggies
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "Veggies" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option name = "Veggies"  value="No">No</option>
+                            <option name = "Veggies" value="Yes">Yes</option>
+                        </select>
+                        <!-- <input type="number" name = "Veggies" required/> -->
+
+                        <p class="py-2 text-sm text-gray-600">If you consume vegetables one or more times in a day, then select Yes.</p>
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Heavy Alchohol Consumption
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "HvyAlcoholConsump" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                        <!-- <input type="number" name = "HvyAlcoholConsump" required/> -->
+
+                        <p class="py-2 text-sm text-gray-600">If you are a person who consumes Alchohol more than 14 drinks per week for men, and 7 drinks per week for women, then select Yes.</p>
+                    </div>
+                </div>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Education level
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name="Education" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="1">Never attended school or only kindergarten</option>
+                            <option value="2">Grades 1 through 8 (Elementary) </option>
+                            <option value="3">Grades 9 through 11 (Some high school) </option>
+                            <option value="4">Grade 12 or GED (High school graduate)</option>
+                            <option value="5">College 1 year to 3 years (Some college or technical school) </option>
+                            <option value="6">College 4 years or more (College graduate)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Income
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name="Income" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="1">less than $10,000 </option>
+                            <option value="2">less than $20,000 </option>
+                            <option value="3">less than $25,000</option>
+                            <option value="4">less than $30,000</option>
+                            <option value="5">less than $35,000</option>
+                            <option value="6">less than $65,000</option>
+                            <option value="7">less than $75,000</option>
+                            <option value="8">$75,000 or more</option>
+                        </select>
+                    </div>
+                </div>
+
+        </div>
+            <!--/Card-->
+
+            <!--divider-->
+            <hr class="bg-gray-300 my-12">
+
+            <!--Title-->
+            <h2 class="font-sans font-bold break-normal text-gray-700 px-2 pb-8 text-xl">Section 3- Healthcare</h2>
+
+            <!--Card-->
+            <div id='section3' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
+               
+
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Any Health care
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "AnyHealthcare" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                        
+                        <p class="py-2 text-sm text-gray-600">If you have any kind of health care coverage, then select Yes.</p>
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            General Health care
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "GenHlth" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="1">Excellent</option>
+                            <option value="2">Very good</option>
+                            <option value="3">Good</option>
+                            <option value="4">Fair</option>
+                            <option value="5">Poor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-textfield">
+                            Mental Health care
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <input class="form-input block w-full focus:bg-white" name = "MentHlth"  type="number" value="">
+                        <p class="py-2 text-sm text-gray-600">How many days during the past 30 days, your mental health was not good?</p>
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-textfield">
+                            Physical Health care
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <input class="form-input block w-full focus:bg-white" name = "PhysHlth" type="number" value="">
+                        <p class="py-2 text-sm text-gray-600">How many days during the past 30 days, your physical health was not good?</p>
+
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            Walking difficulty
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "Diffwalk" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+
+
+                        <p class="py-2 text-sm text-gray-600">If you face any difficulties while climbing stairs or walking, then select Yes.</p>
+                    </div>
+                </div>
+                <div class="md:flex mb-6">
+                    <div class="md:w-1/3">
+                        <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4" for="my-select">
+                            No doctor because of cost
+                        </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <select name = "NoDocbcCost" class="form-select block w-full focus:bg-white" id="my-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+
+
+                        <p class="py-2 text-sm text-gray-600">Was there a time in the past 12 months when you needed to see a doctor but could not because of cost?</p>
+                    </div>
+                </div>
+
+
+        </div>
+            
+                <div style="margin: 40px;" >
+                    <input type="submit" value = "Submit"  class="submit-button" /></p>
+                </div>
+
+            </div>
+           
+        </form>
+        </section>
+        
+
+      </body>
+      </html>
